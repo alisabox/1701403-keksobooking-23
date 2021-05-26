@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Alisa](https://up.htmlacademy.ru/javascript/23/user/1701403).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/id144641).
 
 ---
 
