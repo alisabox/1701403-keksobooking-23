@@ -18,8 +18,7 @@ const randomCoordinate = (min, max, decimals) => {
 };
 
 const PUBLICATIONS_COUNT = 10;
-const MIN_IMAGE_NUMBER = 1;
-const MAX_IMAGE_NUMBER = 8;
+const AVATARS_COUNT = 11;
 const MIN_PRICE = 1000;
 const MAX_PRICE = 10000;
 const MIN_ROOMS = 1;
@@ -62,10 +61,24 @@ const DESCRIPTION = [
   'Толстые стрены и полная приватность',
 ];
 
+const avatars = [];
+for (let _i = 1; _i < AVATARS_COUNT + 1; _i++) {
+  (_i < 10) ? avatars.push(`0${  _i}`) : avatars.push(`${  _i}`);
+}
+
+const shuffledAvatars = avatars.slice();
+for (let _i = 0; _i < avatars.length; _i++) {
+  const _j = randomNumber(_i, avatars.length - 1);
+  [shuffledAvatars[_i], shuffledAvatars[_j]] = [shuffledAvatars[_j], shuffledAvatars[_i]];
+}
+
+let avatarIndex = 0;
+
 const getAuthor = () => {
   const author = {
-    avatar: `img/avatars/user0${  randomNumber(MIN_IMAGE_NUMBER, MAX_IMAGE_NUMBER)  }.png`,
+    avatar: `img/avatars/user${  shuffledAvatars[avatarIndex]  }.png`,
   };
+  avatarIndex++;
   return author;
 };
 
