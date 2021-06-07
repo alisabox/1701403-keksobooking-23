@@ -29,6 +29,7 @@ const MIN_LATITUDE = 35.65000;
 const MAX_LATITUDE = 35.70000;
 const MIN_LANGITUDE = 139.70000;
 const MAX_LANGITUDE = 139.80000;
+const DECIMALS = 5;
 
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const CHECK_IN_OUT = ['12:00', '13:00', '14:00'];
@@ -63,7 +64,7 @@ const DESCRIPTION = [
 
 const avatars = [];
 for (let _i = 1; _i < AVATARS_COUNT + 1; _i++) {
-  (_i < 10) ? avatars.push(`0${  _i}`) : avatars.push(`${  _i}`);
+  (String(_i).length > 1) ? avatars.push(`${  _i}`) : avatars.push(`0${  _i}`);
 }
 
 const shuffledAvatars = avatars.slice();
@@ -84,8 +85,8 @@ const getAuthor = () => {
 
 const getLocation = () => {
   const location = {
-    lat: parseFloat(randomCoordinate(MIN_LATITUDE, MAX_LATITUDE, 5)),
-    lng: parseFloat(randomCoordinate(MIN_LANGITUDE, MAX_LANGITUDE, 5)),
+    lat: parseFloat(randomCoordinate(MIN_LATITUDE, MAX_LATITUDE, DECIMALS)),
+    lng: parseFloat(randomCoordinate(MIN_LANGITUDE, MAX_LANGITUDE, DECIMALS)),
   };
   return location;
 };
