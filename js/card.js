@@ -47,10 +47,16 @@ const createCard = ({ author, offer }) => {
     return time.classList.add('hidden');
   }
 
-  const featuresList = offer.features.map((feature) => `<li class="popup__feature popup__feature--${feature}"></li>`);
+  const featuresList = offer.features.map((feature) => {
+    const newFeature = document.createElement('li');
+    newFeature.classList.add('popup__feature', `popup__feature--${feature}`);
+    return newFeature;
+  });
   const features = cardTemplate.querySelector('.popup__features');
-  features.innerHTML = '';
-  featuresList.map((feature) => features.insertAdjacentHTML('beforeend', feature));
+  while (features.firstChild) {
+    features.removeChild(features.firstChild);
+  }
+  featuresList.map((feature) => features.appendChild(feature));
   if (featuresList.length === 0) {
     features.classList.add('hidden');
   }
@@ -61,10 +67,20 @@ const createCard = ({ author, offer }) => {
     description.classList.add('hidden');
   }
 
-  const photosList = offer.photos.map((photo) => `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
+  const photosList = offer.photos.map((photo) => {
+    const newPhoto = document.createElement('img');
+    newPhoto.classList.add('popup__photo');
+    newPhoto.src = photo;
+    newPhoto.width = '45';
+    newPhoto.height = '40';
+    newPhoto.alt = 'Фотография жилья';
+    return newPhoto;
+  });
   const photos = cardTemplate.querySelector('.popup__photos');
-  photos.innerHTML = '';
-  photosList.map((photo) => photos.insertAdjacentHTML('beforeend', photo));
+  while (photos.firstChild) {
+    photos.removeChild(photos.firstChild);
+  }
+  photosList.map((photo) => photos.appendChild(photo));
   if (photosList.length === 0) {
     photos.classList.add('hidden');
   }
