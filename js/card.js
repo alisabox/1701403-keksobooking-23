@@ -47,17 +47,14 @@ const createCard = ({ author, offer }) => {
     return time.classList.add('hidden');
   }
 
-  const featuresList = offer.features.map((feature) => {
-    const newFeature = document.createElement('li');
-    newFeature.classList.add('popup__feature', `popup__feature--${feature}`);
-    return newFeature;
-  });
   const features = cardTemplate.querySelector('.popup__features');
-  while (features.firstChild) {
-    features.removeChild(features.firstChild);
-  }
-  featuresList.map((feature) => features.appendChild(feature));
-  if (featuresList.length === 0) {
+  [].forEach.call(features.children, (feature) => {
+    if (offer.features.indexOf(feature.classList[1].replace('popup__feature--', '')) === -1) {
+      feature.remove();
+    }
+  });
+
+  if (offer.features.length === 0) {
     features.classList.add('hidden');
   }
 
