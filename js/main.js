@@ -1,6 +1,7 @@
 import {generatePublications} from './data.js';
 import {createCard} from './card.js';
-import {setInactiveState, setActiveState} from './form.js';
+import {setInactiveState, setActiveState} from './form-state.js';
+import './form-validation.js';
 
 const PUBLICATIONS_COUNT = 10;
 const publications = generatePublications(PUBLICATIONS_COUNT);
