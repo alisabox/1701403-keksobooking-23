@@ -1,10 +1,15 @@
-const MAX_ROOMS = 100;
 const minPrice = {
   bungalow: 0,
   flat: 1000,
   hotel: 2000,
   house: 3000,
   palace: 5000,
+};
+const numberOfGuests = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
 };
 
 const form = document.querySelector('.ad-form');
@@ -19,40 +24,25 @@ const checkTypeOfLoging = () => {
   price.placeholder = minPrice[typeOfLodging.value];
 };
 
-const checkGuestsValidity = () => {
-  if (+guests.value > +rooms.value || (
-    +guests.value === 0 && +rooms.value < MAX_ROOMS) || (
-    +guests.value > 0 && +rooms.value === MAX_ROOMS)) {
-    guests.setCustomValidity('Неподходящее количество мест для выбранного количества комнат');
-  } else {
-    guests.setCustomValidity('');
-  }
-  guests.reportValidity();
+const validateRooms = () => {
+  const roomValue = rooms.value;
+  guestsOptions.forEach((guest) => {
+    // Следующая строка берет значение объекта numberOfGuests по ключу, соответствующему выбранному в rooms значению
+    // и записывает в переменную isDisabled true, если в этом значении не содержится guest.value в текущей итерации
+    // либо записывает в переменную isDisabled false, если содержится
+    const isDisabled = (numberOfGuests[roomValue].indexOf(guest.value) === -1);
+    guest.selected = numberOfGuests[roomValue][0] === guest.value;
+    guest.disabled = isDisabled;
+    guest.hidden = isDisabled;
+  });
 };
 
-const getGuestsOptions = () => {
-  if (rooms.value < MAX_ROOMS) {
-    guestsOptions.forEach((option) => {
-      if (+option.value <= +rooms.value && +option.value > 0) {
-        option.hidden = false;
-      } else {
-        option.hidden = true;
-      }
-    });
-  } else {
-    guestsOptions.forEach((option) => {
-      if (+option.value === 0) {
-        option.hidden = false;
-      } else {
-        option.hidden = true;
-      }
-    });
-  }
+validateRooms();
+
+const onRoomNumberChange = () => {
+  validateRooms();
 };
 
 typeOfLodging.addEventListener('input', checkTypeOfLoging);
 
-rooms.addEventListener('input', () => {
-  getGuestsOptions();
-  checkGuestsValidity();
-});
+rooms.addEventListener('change', onRoomNumberChange);
