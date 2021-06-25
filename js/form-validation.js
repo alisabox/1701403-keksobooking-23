@@ -18,6 +18,8 @@ const typeOfLodging = form.querySelector('#type');
 const rooms = form.querySelector('#room_number');
 const guests = document.querySelector('#capacity');
 const guestsOptions = guests.querySelectorAll('option');
+const checkin = form.querySelector('#timein');
+const checkout = form.querySelector('#timeout');
 
 const checkTypeOfLoging = () => {
   price.min = minPrice[typeOfLodging.value];
@@ -27,9 +29,6 @@ const checkTypeOfLoging = () => {
 const validateRooms = () => {
   const roomValue = rooms.value;
   guestsOptions.forEach((guest) => {
-    // Следующая строка берет значение объекта numberOfGuests по ключу, соответствующему выбранному в rooms значению
-    // и записывает в переменную isDisabled true, если в этом значении не содержится guest.value в текущей итерации
-    // либо записывает в переменную isDisabled false, если содержится
     const isDisabled = (numberOfGuests[roomValue].indexOf(guest.value) === -1);
     guest.selected = numberOfGuests[roomValue][0] === guest.value;
     guest.disabled = isDisabled;
@@ -43,6 +42,14 @@ const onRoomNumberChange = () => {
   validateRooms();
 };
 
-typeOfLodging.addEventListener('input', checkTypeOfLoging);
+typeOfLodging.addEventListener('change', checkTypeOfLoging);
 
 rooms.addEventListener('change', onRoomNumberChange);
+
+checkin.addEventListener('change', () => {
+  checkout.value = checkin.value;
+});
+
+checkout.addEventListener('change', () => {
+  checkin.value = checkout.value;
+});
