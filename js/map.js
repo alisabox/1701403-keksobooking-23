@@ -14,12 +14,12 @@ const centerOfTokyo = {
   lng: 139.75871,
 };
 const mainPinSize = {
-  x: 52,
-  y: 52,
+  width: 52,
+  height: 52,
 };
 const pointPinSize = {
-  x: 40,
-  y: 40,
+  width: 40,
+  height: 40,
 };
 
 const map = L.map('map-canvas')
@@ -40,8 +40,8 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [mainPinSize.x, mainPinSize.y],
-  iconAnchor: [mainPinSize.x/2, mainPinSize.y],
+  iconSize: [mainPinSize.width, mainPinSize.height],
+  iconAnchor: [mainPinSize.width/2, mainPinSize.height],
 });
 
 const mainPinMarker = L.marker(
@@ -79,8 +79,8 @@ publications.forEach((point) => {
   const { location: { lat, lng } } = point;
   const icon = L.icon({
     iconUrl: 'img/pin.svg',
-    iconSize: [pointPinSize.x, pointPinSize.y],
-    iconAnchor: [pointPinSize.x/2, pointPinSize.y],
+    iconSize: [pointPinSize.width, pointPinSize.height],
+    iconAnchor: [pointPinSize.width/2, pointPinSize.height],
   });
 
   const marker = L.marker(
