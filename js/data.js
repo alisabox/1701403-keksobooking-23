@@ -12,6 +12,7 @@ const MAX_LATITUDE = 35.70000;
 const MIN_LANGITUDE = 139.70000;
 const MAX_LANGITUDE = 139.80000;
 const DECIMALS = 5;
+const PUBLICATIONS_COUNT = 10;
 
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const CHECK_IN_OUT = ['12:00', '13:00', '14:00'];
@@ -97,4 +98,6 @@ const getPublication = () => {
 
 const generatePublications = (count) => new Array(count).fill(null).map(() => getPublication());
 
-export {generatePublications};
+const publications = generatePublications(PUBLICATIONS_COUNT);
+
+export {publications};
