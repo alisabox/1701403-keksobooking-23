@@ -1,3 +1,7 @@
+import {sendData} from './fetch.js';
+import {createSuccessMessage, createErrorMessage} from './alert.js';
+import {setInitialAddress} from './map.js';
+
 const minPrice = {
   bungalow: 0,
   flat: 1000,
@@ -20,6 +24,7 @@ const guests = document.querySelector('#capacity');
 const guestsOptions = guests.querySelectorAll('option');
 const checkin = form.querySelector('#timein');
 const checkout = form.querySelector('#timeout');
+const resetButton = document.querySelector('.ad-form__reset');
 
 const checkTypeOfLoging = () => {
   price.min = minPrice[typeOfLodging.value];
@@ -53,3 +58,27 @@ checkin.addEventListener('change', () => {
 checkout.addEventListener('change', () => {
   checkin.value = checkout.value;
 });
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  form.reset();
+  setInitialAddress();
+});
+
+const setUserFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => {
+        form.reset();
+        setInitialAddress();
+        createSuccessMessage();
+      },
+      () => createErrorMessage(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {setUserFormSubmit};
