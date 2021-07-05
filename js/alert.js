@@ -22,27 +22,42 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+const succeccMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const successMessage = succeccMessageTemplate.cloneNode(true);
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const errorMessage = errorMessageTemplate.cloneNode(true);
+
+const closeMessageHandler = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (successMessage) {
+      successMessage.remove();
+    }
+    if (errorMessage) {
+      errorMessage.remove();
+    }
+  }
+};
+
+const removeMessageListener = (evt) => {
+  document.removeEventListener('keydown', closeMessageHandler(evt));
+};
+
 const closeMessage = (message) => {
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      message.remove();
-    }
+    closeMessageHandler(evt);
+    removeMessageListener(evt);
   });
   message.addEventListener('click', message.remove);
 };
 
 const createSuccessMessage = () => {
-  const messageTemplate = document.querySelector('#success').content.querySelector('.success');
-  const message = messageTemplate.cloneNode(true);
-  document.querySelector('body').append(message);
-  closeMessage(message);
+  document.querySelector('body').append(successMessage);
+  closeMessage(successMessage);
 };
 
 const createErrorMessage = () => {
-  const messageTemplate = document.querySelector('#error').content.querySelector('.error');
-  const message = messageTemplate.cloneNode(true);
-  document.querySelector('body').append(message);
-  closeMessage(message);
+  document.querySelector('body').append(errorMessage);
+  closeMessage(errorMessage);
 };
 
 export {showAlert, createSuccessMessage, createErrorMessage};
