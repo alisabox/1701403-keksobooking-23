@@ -1,5 +1,10 @@
 const ALERT_SHOW_TIME = 5000;
 
+const Key = {
+  ESC: 'Esc',
+  ESCAPE: 'Escape',
+};
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
@@ -22,25 +27,19 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-const succeccMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const successMessage = succeccMessageTemplate.cloneNode(true);
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const successMessage = successMessageTemplate.cloneNode(true);
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorMessage = errorMessageTemplate.cloneNode(true);
 
 const closeMessageHandler = (evt) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
-    if (successMessage) {
-      successMessage.remove();
-    }
-    if (errorMessage) {
-      errorMessage.remove();
-    }
-    document.removeEventListener('keydown', closeMessageHandler);
+  if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
+    document.querySelector('.popup-message').remove();
   }
 };
 
 const closeMessage = (message) => {
-  document.addEventListener('keydown', closeMessageHandler);
+  document.addEventListener('keydown', closeMessageHandler, {once: true});
   message.addEventListener('click', () => {
     message.remove();
     document.removeEventListener('keydown', closeMessageHandler);
