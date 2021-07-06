@@ -35,19 +35,16 @@ const closeMessageHandler = (evt) => {
     if (errorMessage) {
       errorMessage.remove();
     }
+    document.removeEventListener('keydown', closeMessageHandler);
   }
 };
 
-const removeMessageListener = (evt) => {
-  document.removeEventListener('keydown', closeMessageHandler(evt));
-};
-
 const closeMessage = (message) => {
-  document.addEventListener('keydown', (evt) => {
-    closeMessageHandler(evt);
-    removeMessageListener(evt);
+  document.addEventListener('keydown', closeMessageHandler);
+  message.addEventListener('click', () => {
+    message.remove();
+    document.removeEventListener('keydown', closeMessageHandler);
   });
-  message.addEventListener('click', message.remove);
 };
 
 const createSuccessMessage = () => {
