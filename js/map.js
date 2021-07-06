@@ -1,4 +1,3 @@
-import {publications} from './data.js';
 import {createCard} from './card.js';
 import {setInactiveState, setActiveState} from './form-state.js';
 
@@ -6,8 +5,10 @@ setInactiveState();
 
 const address = document.querySelector('#address');
 
-const MAP_ZOOM = 12;
+const MAP_ZOOM = 13;
 const DECIMALS = 5;
+const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 const centerOfTokyo = {
   lat: 35.68272,
@@ -32,9 +33,9 @@ const map = L.map('map-canvas')
   }, MAP_ZOOM);
 
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  TILE_LAYER,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: ATTRIBUTION,
   },
 ).addTo(map);
 
@@ -57,46 +58,51 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
+const getAddress = (lat, lng) => address.value = `${ lat.toFixed(DECIMALS) }, ${ lng.toFixed(DECIMALS) }`;
+getAddress(centerOfTokyo.lat, centerOfTokyo.lng);
+
 mainPinMarker.on('moveend', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
-  address.value = `${ lat.toFixed(DECIMALS) }, ${ lng.toFixed(DECIMALS) }`;
+  getAddress(lat, lng);
 });
 
-const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', () => {
+const setInitialAddress = () => {
+  const { lat, lng } = centerOfTokyo;
   mainPinMarker.setLatLng({
-    lat: centerOfTokyo.lat,
-    lng: centerOfTokyo.lng,
+    lat,
+    lng,
   });
-
   map.setView({
-    lat: centerOfTokyo.lat,
-    lng: centerOfTokyo.lng,
+    lat,
+    lng,
   }, MAP_ZOOM);
-});
+  getAddress(lat, lng);
+};
 
-publications.forEach((point) => {
-  const { location: { lat, lng } } = point;
-  const icon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [pointPinSize.width, pointPinSize.height],
-    iconAnchor: [pointPinSize.width/2, pointPinSize.height],
-  });
-
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon,
-    },
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(createCard(point),
+const setMapPoints = (publications) => {
+  publications.forEach((point) => {
+    const { location: { lat, lng } } = point;
+    const icon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [pointPinSize.width, pointPinSize.height],
+      iconAnchor: [pointPinSize.width/2, pointPinSize.height],
+    });
+    const marker = L.marker(
       {
-        keepInView: true,
-      });
-});
+        lat,
+        lng,
+      },
+      {
+        icon,
+      },
+    );
+    marker
+      .addTo(map)
+      .bindPopup(createCard(point),
+        {
+          keepInView: true,
+        });
+  });
+};
+
+export {setMapPoints, setInitialAddress};

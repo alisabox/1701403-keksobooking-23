@@ -49,22 +49,22 @@ const createCard = ({ author, offer }) => {
 
   const features = cardTemplate.querySelector('.popup__features');
   [].forEach.call(features.children, (feature) => {
-    if (offer.features.indexOf(feature.classList[1].replace('popup__feature--', '')) === -1) {
+    if (offer.features && offer.features.indexOf(feature.classList[1].replace('popup__feature--', '')) === -1) {
       feature.remove();
     }
   });
 
-  if (offer.features.length === 0) {
+  if (offer.features && offer.features.length === 0) {
     features.classList.add('hidden');
   }
 
   const description = cardTemplate.querySelector('.popup__description');
   description.textContent = offer.description;
-  if (offer.description.length === 0) {
+  if (offer.description && offer.description.length === 0) {
     description.classList.add('hidden');
   }
 
-  const photosList = offer.photos.map((photo) => {
+  const photosList = offer.photos && offer.photos.map((photo) => {
     const newPhoto = document.createElement('img');
     newPhoto.classList.add('popup__photo');
     newPhoto.src = photo;
@@ -77,8 +77,8 @@ const createCard = ({ author, offer }) => {
   while (photos.firstChild) {
     photos.removeChild(photos.firstChild);
   }
-  photosList.map((photo) => photos.appendChild(photo));
-  if (photosList.length === 0) {
+  photosList && photosList.map((photo) => photos.appendChild(photo));
+  if (photosList && photosList.length === 0) {
     photos.classList.add('hidden');
   }
 
