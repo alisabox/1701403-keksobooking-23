@@ -30,7 +30,7 @@ const createCard = ({ author, offer }) => {
   }
 
   const type = cardTemplate.querySelector('.popup__type');
-  type.textContent = Types[offer.type];
+  type.textContent = Types[offer.type.toUpperCase()];
   if (offer.type.length === 0) {
     type.classList.add('hidden');
   }
