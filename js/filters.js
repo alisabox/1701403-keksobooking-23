@@ -33,15 +33,15 @@ const FilterRules = {
 
 const filterData = (data) => {
   const offers = [];
-  let i = 0;
+  let _i = 0;
   let result;
 
-  while (i < data.length && offers.length < PUBLICATIONS_COUNT) {
-    result = filters.every((filter) => (filter.value === DEFAULT_VALUE) ? true : FilterRules[filter.id](data[i], filter));
+  while (_i < data.length && offers.length < PUBLICATIONS_COUNT) {
+    result = filters.every((filter) => (filter.value === DEFAULT_VALUE) ? true : FilterRules[filter.id](data[_i], filter));
     if (result) {
-      offers.push(data[i]);
+      offers.push(data[_i]);
     }
-    i++;
+    _i++;
   }
   return offers;
 };
