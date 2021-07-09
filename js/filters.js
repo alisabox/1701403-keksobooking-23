@@ -1,9 +1,6 @@
-const filters = document.querySelector('.map__filters');
-const housingFilter = filters.querySelector('#housing-type');
-const priceFilter = filters.querySelector('#housing-price');
-const roomsFilter = filters.querySelector('#housing-rooms');
-const guestsFilter = filters.querySelector('#housing-guests');
-const featuresFilter = filters.querySelectorAll('.map__checkbox');
+const filters = Array.from(document.querySelector('.map__filters').children);
+const PUBLICATIONS_COUNT = 10;
+const DEFAULT_VALUE = 'any';
 
 const PriceFilterValues = {
   LOW: {
@@ -20,42 +17,33 @@ const PriceFilterValues = {
   },
 };
 
-const getPublicationRank = (item) => {
-  let rank = 0;
-  const selectedPrice = PriceFilterValues[priceFilter.value.toUpperCase()];
-  const selectedFeatures = [];
-  featuresFilter.forEach((feature) => {
-    if (feature.checked) {
-      selectedFeatures.push(feature.value);
-    }
-  });
-  if (item.offer.type === housingFilter.value) {
-    rank++;
-  }
-  if (selectedPrice && item.offer.price >= selectedPrice.MIN && item.offer.price < selectedPrice.MAX) {
-    rank++;
-  }
-  if (item.offer.rooms === parseFloat(roomsFilter.value)) {
-    rank++;
-  }
-  if (item.offer.guests === parseFloat(guestsFilter.value)) {
-    rank++;
-  }
-  if (item.offer.features) {
-    const similarFeatures = item.offer.features.filter((value) => selectedFeatures.includes(value));
-    if (similarFeatures) {
-      rank += similarFeatures.length;
-    }
-  }
-  return rank;
+const FilterRules = {
+  'housing-type': (data, filter) => filter.value === data.offer.type,
+  'housing-price': (data, filter) => {
+    const selectedPrice = PriceFilterValues[filter.value.toUpperCase()];
+    return data.offer.price >= selectedPrice.MIN && data.offer.price < selectedPrice.MAX;
+  },
+  'housing-rooms': (data, filter) => filter.value === data.offer.rooms.toString(),
+  'housing-guests': (data, filter) => filter.value === data.offer.guests.toString(),
+  'housing-features': (data, filter) => {
+    const checkedListElements = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
+    return checkedListElements.every((checkbox) => data.offer.features && data.offer.features.some((feature) => feature === checkbox.value));
+  },
 };
 
-const comparePublications = (item1, item2) => {
-  const rank1 = getPublicationRank(item1);
-  const rank2 = getPublicationRank(item2);
-  return rank2 - rank1;
-};
+const filterData = (data) => {
+  const offers = [];
+  let i = 0;
+  let result;
 
-const filterData = (data) => data.slice().sort(comparePublications);
+  while (i < data.length && offers.length < PUBLICATIONS_COUNT) {
+    result = filters.every((filter) => (filter.value === DEFAULT_VALUE) ? true : FilterRules[filter.id](data[i], filter));
+    if (result) {
+      offers.push(data[i]);
+    }
+    i++;
+  }
+  return offers;
+};
 
 export {filterData};
