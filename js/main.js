@@ -1,5 +1,6 @@
 import './map.js';
 import './form-validation.js';
+import './preview.js';
 import {onSuccess} from './map.js';
 import {request} from './fetch.js';
 import {showAlert} from './alert.js';
