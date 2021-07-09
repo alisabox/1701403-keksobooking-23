@@ -1,15 +1,15 @@
-import {sendData} from './fetch.js';
+import {request} from './fetch.js';
 import {createSuccessMessage, createErrorMessage} from './alert.js';
 import {setInitialAddress} from './map.js';
 
-const minPrice = {
-  bungalow: 0,
-  flat: 1000,
-  hotel: 2000,
-  house: 3000,
-  palace: 5000,
+const MinPrice = {
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOTEL: 2000,
+  HOUSE: 3000,
+  PALACE: 5000,
 };
-const numberOfGuests = {
+const NumberOfGuests = {
   1: ['1'],
   2: ['1', '2'],
   3: ['1', '2', '3'],
@@ -27,15 +27,15 @@ const checkout = form.querySelector('#timeout');
 const resetButton = document.querySelector('.ad-form__reset');
 
 const checkTypeOfLoging = () => {
-  price.min = minPrice[typeOfLodging.value];
-  price.placeholder = minPrice[typeOfLodging.value];
+  price.min = MinPrice[typeOfLodging.value];
+  price.placeholder = MinPrice[typeOfLodging.value];
 };
 
 const validateRooms = () => {
   const roomValue = rooms.value;
   guestsOptions.forEach((guest) => {
-    const isDisabled = (numberOfGuests[roomValue].indexOf(guest.value) === -1);
-    guest.selected = numberOfGuests[roomValue][0] === guest.value;
+    const isDisabled = (NumberOfGuests[roomValue].indexOf(guest.value) === -1);
+    guest.selected = NumberOfGuests[roomValue][0] === guest.value;
     guest.disabled = isDisabled;
     guest.hidden = isDisabled;
   });
@@ -69,13 +69,14 @@ const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    sendData(
+    request(
       () => {
         form.reset();
         setInitialAddress();
         createSuccessMessage();
       },
       () => createErrorMessage(),
+      'POST',
       new FormData(evt.target),
     );
   });
