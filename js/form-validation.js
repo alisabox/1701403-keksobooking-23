@@ -1,13 +1,14 @@
 import {request} from './fetch.js';
 import {createSuccessMessage, createErrorMessage} from './alert.js';
 import {setInitialAddress} from './map.js';
+import {removeAvatar, removeHousingPreview} from './preview.js';
 
 const MinPrice = {
   BUNGALOW: 0,
   FLAT: 1000,
-  HOTEL: 2000,
-  HOUSE: 3000,
-  PALACE: 5000,
+  HOTEL: 3000,
+  HOUSE: 5000,
+  PALACE: 10000,
 };
 const NumberOfGuests = {
   1: ['1'],
@@ -27,8 +28,8 @@ const checkout = form.querySelector('#timeout');
 const resetButton = document.querySelector('.ad-form__reset');
 
 const checkTypeOfLoging = () => {
-  price.min = MinPrice[typeOfLodging.value];
-  price.placeholder = MinPrice[typeOfLodging.value];
+  price.min = MinPrice[typeOfLodging.value.toUpperCase()];
+  price.placeholder = MinPrice[typeOfLodging.value.toUpperCase()];
 };
 
 const validateRooms = () => {
@@ -41,11 +42,35 @@ const validateRooms = () => {
   });
 };
 
-validateRooms();
-
 const onRoomNumberChange = () => {
   validateRooms();
 };
+
+const setFormInitialState = () => {
+  form.reset();
+  setInitialAddress();
+  checkTypeOfLoging();
+  removeAvatar();
+  removeHousingPreview();
+};
+
+const setUserFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    request(
+      () => {
+        setFormInitialState();
+        createSuccessMessage();
+      },
+      () => createErrorMessage(),
+      'POST',
+      new FormData(evt.target),
+    );
+  });
+};
+
+validateRooms();
 
 typeOfLodging.addEventListener('change', checkTypeOfLoging);
 
@@ -61,25 +86,7 @@ checkout.addEventListener('change', () => {
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  form.reset();
-  setInitialAddress();
+  setFormInitialState();
 });
-
-const setUserFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    request(
-      () => {
-        form.reset();
-        setInitialAddress();
-        createSuccessMessage();
-      },
-      () => createErrorMessage(),
-      'POST',
-      new FormData(evt.target),
-    );
-  });
-};
 
 export {setUserFormSubmit};
