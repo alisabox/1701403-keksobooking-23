@@ -3,19 +3,17 @@ import {setInactiveState, setActiveState} from './form-state.js';
 import {filterData} from './filters.js';
 import {debounce} from './debounce.js';
 
-setInactiveState();
-
-let fetchedData = [];
-
-const address = document.querySelector('#address');
-const filters = document.querySelector('.map__filters');
-
 const MAP_ZOOM = 13;
 const DECIMALS = 5;
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const PUBLICATIONS_COUNT = 10;
 const RERENDER_DELAY = 500;
+
+const address = document.querySelector('#address');
+const filters = document.querySelector('.map__filters');
+
+let fetchedData = [];
 
 const CenterOfTokyo = {
   LAT: 35.68272,
@@ -29,6 +27,8 @@ const PointPinSize = {
   WIDTH: 40,
   HEIGHT: 40,
 };
+
+setInactiveState();
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -63,15 +63,7 @@ const mainPinMarker = L.marker(
   },
 );
 
-mainPinMarker.addTo(map);
-
 const getAddress = (lat, lng) => address.value = `${ lat.toFixed(DECIMALS) }, ${ lng.toFixed(DECIMALS) }`;
-getAddress(CenterOfTokyo.LAT, CenterOfTokyo.LNG);
-
-mainPinMarker.on('moveend', (evt) => {
-  const { lat, lng } = evt.target.getLatLng();
-  getAddress(lat, lng);
-});
 
 const setInitialAddress = () => {
   const { LAT, LNG } = CenterOfTokyo;
@@ -126,5 +118,14 @@ const onSuccess = (data) => {
   setMapPoints(fetchedData);
   filters.addEventListener('change', processChange);
 };
+
+mainPinMarker.addTo(map);
+
+getAddress(CenterOfTokyo.LAT, CenterOfTokyo.LNG);
+
+mainPinMarker.on('moveend', (evt) => {
+  const { lat, lng } = evt.target.getLatLng();
+  getAddress(lat, lng);
+});
 
 export {onSuccess, setInitialAddress};

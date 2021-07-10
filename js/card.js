@@ -1,3 +1,6 @@
+const ROOMS_NOUN_FORMS = ['комната', 'комнаты', 'комнат'];
+const GUESTS_NOUN_FORMS = ['гостя', 'гостей', 'гостей'];
+
 const card = document.querySelector('#card').content.querySelector('.popup');
 
 const Types = {
@@ -6,6 +9,20 @@ const Types = {
   HOUSE: 'Дом',
   PALACE: 'Дворец',
   HOTEL: 'Отель',
+};
+
+const numForm = (num, nominative, genitiveSingular, genitivePlural) => {
+  if(num > 10 && (Math.round((num % 100) / 10)) === 1){
+    return genitivePlural;
+  } else {
+    switch(num % 10){
+      case 1: return nominative;
+      case 2:
+      case 3:
+      case 4: return genitiveSingular;
+    }
+    return genitivePlural;
+  }
 };
 
 const createCard = ({ author, offer }) => {
@@ -36,7 +53,7 @@ const createCard = ({ author, offer }) => {
   }
 
   const capacity = cardTemplate.querySelector('.popup__text--capacity');
-  capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+  capacity.textContent = `${offer.rooms} ${numForm(offer.rooms, ...ROOMS_NOUN_FORMS)} для ${offer.guests} ${numForm(offer.guests, ...GUESTS_NOUN_FORMS)}`;
   if (offer.rooms.length === 0 && offer.guests.length === 0) {
     return capacity.classList.add('hidden');
   }
