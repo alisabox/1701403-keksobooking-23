@@ -52,7 +52,7 @@ const removeHousingPreview = () => {
   }
 };
 
-const createImage = () => {
+const createHousingPreview = () => {
   if (housingPreview.hasChildNodes()) {
     return housingPreview.children[0];
   }
@@ -68,7 +68,7 @@ const createImage = () => {
 avatarInput.addEventListener('change', () => imgPreviewHandler(avatarInput, createAvatar()));
 
 housingInput.addEventListener('change', () => {
-  imgPreviewHandler(housingInput, createImage());
+  imgPreviewHandler(housingInput, createHousingPreview());
 });
 
 export {removeAvatar, removeHousingPreview};

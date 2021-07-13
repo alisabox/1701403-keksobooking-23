@@ -27,7 +27,7 @@ const checkin = form.querySelector('#timein');
 const checkout = form.querySelector('#timeout');
 const resetButton = document.querySelector('.ad-form__reset');
 
-const checkTypeOfLoging = () => {
+const onTypeOfLogingChange = () => {
   price.min = MinPrice[typeOfLodging.value.toUpperCase()];
   price.placeholder = MinPrice[typeOfLodging.value.toUpperCase()];
 };
@@ -49,7 +49,7 @@ const onRoomNumberChange = () => {
 const setFormInitialState = () => {
   form.reset();
   setInitialAddress();
-  checkTypeOfLoging();
+  onTypeOfLogingChange();
   removeAvatar();
   removeHousingPreview();
 };
@@ -72,7 +72,7 @@ const setUserFormSubmit = () => {
 
 validateRooms();
 
-typeOfLodging.addEventListener('change', checkTypeOfLoging);
+typeOfLodging.addEventListener('change', onTypeOfLogingChange);
 
 rooms.addEventListener('change', onRoomNumberChange);
 
