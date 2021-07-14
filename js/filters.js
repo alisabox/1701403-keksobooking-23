@@ -1,4 +1,5 @@
-const filters = Array.from(document.querySelector('.map__filters').children);
+const filtersSet = document.querySelector('.map__filters');
+const filters = Array.from(filtersSet.children);
 const PUBLICATIONS_COUNT = 10;
 const DEFAULT_VALUE = 'any';
 
@@ -46,4 +47,11 @@ const filterData = (data) => {
   return offers;
 };
 
-export {filterData};
+const clearFilters = () => {
+  filters.map((filter) => {
+    filter.value = DEFAULT_VALUE;
+  });
+  filtersSet.querySelectorAll('input[type="checkbox"]:checked').forEach((checkedElement) => checkedElement.checked = false);
+};
+
+export {filterData, clearFilters};

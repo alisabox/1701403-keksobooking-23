@@ -1,6 +1,6 @@
 import {createCard} from './card.js';
 import {setInactiveState, setActiveState} from './form-state.js';
-import {filterData} from './filters.js';
+import {filterData, clearFilters} from './filters.js';
 import {debounce} from './debounce.js';
 
 const MAP_ZOOM = 13;
@@ -9,6 +9,8 @@ const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const PUBLICATIONS_COUNT = 10;
 const RERENDER_DELAY = 500;
+const MAIN_PIN_ICON_PATH = 'img/main-pin.svg';
+const POINT_PIN_ICON_PATH = 'img/pin.svg';
 
 const address = document.querySelector('#address');
 const filters = document.querySelector('.map__filters');
@@ -47,7 +49,7 @@ L.tileLayer(
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
+  iconUrl: MAIN_PIN_ICON_PATH,
   iconSize: [MainPinSize.WIDTH, MainPinSize.HEIGHT],
   iconAnchor: [MainPinSize.WIDTH/2, MainPinSize.HEIGHT],
 });
@@ -62,6 +64,8 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
+mainPinMarker.addTo(map);
 
 const getAddress = (lat, lng) => address.value = `${ lat.toFixed(DECIMALS) }, ${ lng.toFixed(DECIMALS) }`;
 
@@ -81,10 +85,11 @@ const setInitialAddress = () => {
 const markerGroup = L.layerGroup().addTo(map);
 
 const setMapPoints = (publications) => {
+  map.closePopup();
   publications.slice(0, PUBLICATIONS_COUNT).forEach((point) => {
     const { location: { lat, lng } } = point;
     const icon = L.icon({
-      iconUrl: 'img/pin.svg',
+      iconUrl: POINT_PIN_ICON_PATH,
       iconSize: [PointPinSize.WIDTH, PointPinSize.HEIGHT],
       iconAnchor: [PointPinSize.WIDTH/2, PointPinSize.HEIGHT],
     });
@@ -119,8 +124,6 @@ const onSuccess = (data) => {
   filters.addEventListener('change', processChange);
 };
 
-mainPinMarker.addTo(map);
-
 getAddress(CenterOfTokyo.LAT, CenterOfTokyo.LNG);
 
 mainPinMarker.on('moveend', (evt) => {
@@ -128,4 +131,9 @@ mainPinMarker.on('moveend', (evt) => {
   getAddress(lat, lng);
 });
 
-export {onSuccess, setInitialAddress};
+const setInitialMapState = () => {
+  clearFilters();
+  setMapPoints(fetchedData);
+};
+
+export {onSuccess, setInitialAddress, setInitialMapState};

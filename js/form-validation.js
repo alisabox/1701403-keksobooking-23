@@ -1,6 +1,6 @@
 import {request} from './fetch.js';
 import {createSuccessMessage, createErrorMessage} from './alert.js';
-import {setInitialAddress} from './map.js';
+import {setInitialAddress, setInitialMapState} from './map.js';
 import {removeAvatar, removeHousingPreview} from './preview.js';
 
 const MinPrice = {
@@ -21,11 +21,11 @@ const form = document.querySelector('.ad-form');
 const price = form.querySelector('#price');
 const typeOfLodging = form.querySelector('#type');
 const rooms = form.querySelector('#room_number');
-const guests = document.querySelector('#capacity');
+const guests = form.querySelector('#capacity');
 const guestsOptions = guests.querySelectorAll('option');
 const checkin = form.querySelector('#timein');
 const checkout = form.querySelector('#timeout');
-const resetButton = document.querySelector('.ad-form__reset');
+const resetButton = form.querySelector('.ad-form__reset');
 
 const onTypeOfLogingChange = () => {
   price.min = MinPrice[typeOfLodging.value.toUpperCase()];
@@ -49,6 +49,7 @@ const onRoomNumberChange = () => {
 const setFormInitialState = () => {
   form.reset();
   setInitialAddress();
+  setInitialMapState();
   onTypeOfLogingChange();
   removeAvatar();
   removeHousingPreview();

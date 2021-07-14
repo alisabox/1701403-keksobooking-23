@@ -1,3 +1,4 @@
+const ERROR_MESSAGE = 'Ошибка загрузки данных с сервера.';
 const Urls = {
   GET: 'https://23.javascript.pages.academy/keksobooking/data',
   POST: 'https://23.javascript.pages.academy/keksobooking',
@@ -17,10 +18,10 @@ const request = (onSuccess, onError, method, body) => {
           onSuccess(data);
         });
     } else {
-      onError('Ошибка загрузки данных с сервера.');
+      onError(ERROR_MESSAGE);
     }
   }).catch(() => {
-    onError('Ошибка загрузки данных с сервера.');
+    onError(ERROR_MESSAGE);
   });
 };
 
