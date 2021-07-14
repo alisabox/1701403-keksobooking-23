@@ -11,6 +11,12 @@ const Types = {
   HOTEL: 'Отель',
 };
 
+const PhotoSettings = {
+  WIDTH: '45',
+  HEIGHT: '40',
+  ALT: 'Фотография жилья',
+};
+
 const numForm = (num, nominative, genitiveSingular, genitivePlural) => {
   if(num > 10 && (Math.round((num % 100) / 10)) === 1){
     return genitivePlural;
@@ -85,9 +91,9 @@ const createCard = ({ author, offer }) => {
     const newPhoto = document.createElement('img');
     newPhoto.classList.add('popup__photo');
     newPhoto.src = photo;
-    newPhoto.width = '45';
-    newPhoto.height = '40';
-    newPhoto.alt = 'Фотография жилья';
+    newPhoto.width = PhotoSettings.WIDTH;
+    newPhoto.height = PhotoSettings.HEIGHT;
+    newPhoto.alt = PhotoSettings.ALT;
     return newPhoto;
   });
   const photos = cardTemplate.querySelector('.popup__photos');
